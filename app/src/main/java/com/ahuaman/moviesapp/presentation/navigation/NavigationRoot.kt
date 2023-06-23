@@ -1,6 +1,9 @@
 package com.ahuaman.moviesapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +15,7 @@ import com.ahuaman.moviesapp.presentation.screens.DetailsMovieScreen
 import com.ahuaman.moviesapp.presentation.screens.FavoritesScreen
 import com.ahuaman.moviesapp.presentation.screens.MoviesScreen
 import com.ahuaman.moviesapp.presentation.screens.DashboardScreen
+import com.ahuaman.moviesapp.presentation.viewmodels.MoviesViewModel
 
 
 @Composable
@@ -42,7 +46,9 @@ fun homeNavGraph (navController: NavHostController) {
         startDestination = HomeScreen.MoviesHomeScreen.route,
     ) {
         composable(HomeScreen.MoviesHomeScreen.route) {
-            MoviesScreen()
+            val moviesViewModel = hiltViewModel<MoviesViewModel>()
+            val movies by moviesViewModel.movies.collectAsStateWithLifecycle()
+            MoviesScreen(moviesList = movies)
         }
         composable(HomeScreen.FavoritesHomeScreen.route) {
             FavoritesScreen(
@@ -76,9 +82,9 @@ sealed class DetailsScreen(val route:String){
     object Information:DetailsScreen("information_screen")
 }
 
-sealed class HomeScreen(val route:String, val int: Int, val title:String){
+sealed class HomeScreen(val route:String, val icon: Int, val title:String){
     object MoviesHomeScreen:HomeScreen("movies_screen", R.drawable.ic_movie, "Movies")
-    object FavoritesHomeScreen:HomeScreen("favorites_screen", R.drawable.ic_favorite, "Favorites")
+    object FavoritesHomeScreen:HomeScreen("favorites_screen", R.drawable.ic_love, "Favorites")
 }
 
 
