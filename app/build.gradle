@@ -46,6 +46,40 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    //flavors
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+
+            //API_KEY STRING
+            buildConfigField "String", "API_KEY", "\"82ca5982f2873c2d38a664b67f135d79\""
+
+            //BASE_URL STRING
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+
+            //IMAGE_URL STRING
+            buildConfigField "String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w500/\""
+
+        }
+        prod {
+            dimension "default"
+            applicationIdSuffix ".prod"
+            versionNameSuffix "-prod"
+
+            //API_KEY STRING
+            buildConfigField "String", "API_KEY", "\"82ca5982f2873c2d38a664b67f135d79\""
+
+            //BASE_URL STRING
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+
+            //IMAGE_URL STRING
+            buildConfigField "String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w500/\""
+        }
+    }
 }
 
 dependencies {

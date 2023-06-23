@@ -35,9 +35,7 @@ fun MoviesScreen(
     Column(modifier = Modifier.fillMaxSize()) {
 
         var searchQuery by rememberSaveable { mutableStateOf("") }
-
         Spacer(modifier = Modifier.height(16.dp))
-
         SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
