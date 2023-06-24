@@ -206,6 +206,20 @@ fun DetailsMovieContent(
             fontWeight = FontWeight(400),
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        val listGenres = genres.map { it.name }.joinToString(separator = " * ")
+
+        //Genres Action * Horror * Comedy
+        Text(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            text = listGenres,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            fontFamily = FontFamily(Font(R.font.googlesans_regular, FontWeight.Normal)),
+            fontWeight = FontWeight(600),
+        )
+
     }
 }
 
