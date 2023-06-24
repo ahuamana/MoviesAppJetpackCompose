@@ -64,15 +64,21 @@ fun MoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(content = {
+        LazyColumn(
+            content = {
             items(moviesList) {
                 HorizontalMovieItem(
                     title = it.title,
                     description = it.overview,
                     imageUrl = it.poster_path,
                     rating = it.vote_average,
+                    realeaseDate = it.release_date?: "",
                     onClick = { onClickNavigateToDetails(it.id) }
                 )
+
+                if(it == moviesList.last()) {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         })
     }
@@ -89,14 +95,16 @@ fun MoviesScreenPrev() {
             title = "Ant-Man y la Avispa: Quantumanía",
             overview = "La pareja de superhéroes Scott Lang y Hope van Dyne regresa para continuar sus aventuras como Ant-Man y la Avispa. Los dos, junto a los padres de Hope, Hank Pym y Janet van Dyne y la hija de Scott, Cassie Lang, se dedican a explorar el Mundo Cuántico, interactuando con nuevas y extrañas criaturas y embarcándose en una aventura que les llevará más allá de los límites de lo que creían posible.",
             poster_path = "https://image.tmdb.org/t/p/original/lKHy0ntGPdQeFwvNq8gK1D0anEr.jpg",
-            vote_average = 6.5f
+            vote_average = 6.5f,
+            release_date = "2022-02-17"
         ),
         MovieDomain(
             id = 2,
             title = "Sisu",
             overview = "En lo profundo de la naturaleza salvaje de Laponia, Aatami Korpi está buscando oro, pero después de tropezar con una patrulla nazi, comienza una persecución impresionante y hambrienta de oro a través de la naturaleza salvaje de Laponia destruida y minada.",
             poster_path = "https://image.tmdb.org/t/p/original/t9VXZkgcxpIwfPUKAWOOONs0vHv.jpg",
-            vote_average = 7.4f
+            vote_average = 7.4f,
+            release_date = "2021-10-01"
         ),
     )
 

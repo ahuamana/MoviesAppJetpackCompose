@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.ahuaman.moviesapp.common.convertDateToFormattedString
 import com.ahuaman.moviesapp.ui.theme.Green40
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
@@ -30,6 +31,7 @@ fun HorizontalMovieItem(
     description: String,
     imageUrl: String,
     rating: Float,
+    realeaseDate: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -68,14 +70,20 @@ fun HorizontalMovieItem(
                 Text(
                     text = title,
                     maxLines = 1,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = description,
+                    text = "Fecha de lanzamiento",
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+
+                //released date -- YYYY-MM-DD to
+                Text(text = convertDateToFormattedString(realeaseDate))
+
                 Spacer(modifier = Modifier.height(8.dp))
                 //starts
                 RatingBar(
@@ -106,6 +114,7 @@ fun HorizontalMovieItemPrev(){
         description = "Durante numerosas misiones más que imposibles, Dom Toretto y su familia han sido capaces de ser más listos, de tener más valor y de ir más rápido que cualquier enemigo que se cruzara con ellos. Pero ahora tendrán que enfrentarse al oponente más letal que jamás hayan conocido: un terrible peligro que resurge del pasado, que se mueve por una sangrienta sed de venganza y que está dispuesto a destrozar a la familia y destruir para siempre todo lo que a Dom le importa.",
         imageUrl = "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
         rating = 3.5f,
-        onClick = {}
+        onClick = {},
+        realeaseDate = "2021-05-19"
     )
 }

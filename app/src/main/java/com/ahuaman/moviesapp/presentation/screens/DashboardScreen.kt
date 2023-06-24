@@ -2,12 +2,15 @@ package com.ahuaman.moviesapp.presentation.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -57,19 +61,22 @@ fun BottomBarCustom(navController: NavHostController){
     val bottomBarDestination = menuItems.any { it.route == currentDestination?.route }
 
     if (bottomBarDestination) {
-        BottomNavigation() {
+        NavigationBar(
+            modifier = Modifier.height(80.dp),
+            containerColor = Color.Black.copy(alpha = 0.8f),
+        ) {
             menuItems.forEach { screen ->
                 //setup the alpha for the selected item
                 val isSelectedMenu = currentDestination?.hierarchy?.any { it.route == screen.route } == true
                 val backgroundAlpha = if (isSelectedMenu) 1f else 0.6f
 
-                BottomNavigationItem(
+                NavigationBarItem(
                     label = {
                         Text(text = screen.title, color = Color.White.copy(alpha = backgroundAlpha)) },
                     icon = { Icon(painterResource(id = screen.icon), contentDescription = screen.title, modifier = Modifier.graphicsLayer(alpha = backgroundAlpha)) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                    selectedContentColor = Color.White,
-                    unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                    //selectedContentColor = Color.White,
+                    //unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                     onClick = {
                         navController.navigate(screen.route) {
                             popUpTo(navController.graph.findStartDestination().id) {

@@ -19,6 +19,7 @@ import com.ahuaman.moviesapp.presentation.screens.FavoritesScreen
 import com.ahuaman.moviesapp.presentation.screens.MoviesScreen
 import com.ahuaman.moviesapp.presentation.screens.DashboardScreen
 import com.ahuaman.moviesapp.presentation.viewmodels.DetailsMovieViewModel
+import com.ahuaman.moviesapp.presentation.viewmodels.FavoritesViewModel
 import com.ahuaman.moviesapp.presentation.viewmodels.MoviesViewModel
 import timber.log.Timber
 
@@ -52,7 +53,6 @@ fun homeNavGraph (navController: NavHostController) {
 
         composable(HomeScreen.MoviesHomeScreen.route) {
             val moviesViewModel = hiltViewModel<MoviesViewModel>()
-
             val movies by moviesViewModel.movies.collectAsStateWithLifecycle()
             MoviesScreen(
                 moviesList = movies,
@@ -63,11 +63,15 @@ fun homeNavGraph (navController: NavHostController) {
             )
         }
         composable(HomeScreen.FavoritesHomeScreen.route) {
+
+            val favoritesViewModel = hiltViewModel<FavoritesViewModel>()
+            val favoriteMovies by favoritesViewModel.favoriteMovies.collectAsStateWithLifecycle()
+
             FavoritesScreen(
-                onClickNavigateToDetails = {
-                    navController.navigate(route = Graph.DETAILS)
+                onClickNavigateToDetails = { movieID ->
+                    navController.navigate(route = Graph.DETAILS + "/$movieID")
                 },
-                favoriteMovies = emptyList()
+                favoriteMovies = favoriteMovies
             )
         }
         detailsNavGraph(navController = navController)

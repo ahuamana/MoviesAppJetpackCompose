@@ -66,7 +66,7 @@ fun DetailsMovieScreen(
                     genres = item.genres?: listOf(),
                     releaseDate = item.release_date?: "",
                     voteAverage = item.vote_average?.toString()?: "",
-                    runtime = item.runtime?.toString()?: "",
+                    runtime = item.runtimeWithMinutes?: "",
                     isFavoriteMovie = isFavoriteMovie
                 )
             }

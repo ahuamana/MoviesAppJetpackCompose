@@ -29,7 +29,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class DetailsMovieViewModel @Inject constructor(
     private val getDetailsMovieUseCase: GetDetailsMovieUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase,
     private val getFavoriteMovieUseCase: GetFavoriteMovieByIdUseCase,
     private val deleteFavoriteMovieUseCase: DeleteFavoriteMovieUseCase
@@ -66,15 +66,14 @@ class DetailsMovieViewModel @Inject constructor(
             id = id
         ).onStart {
             _detailsMovie.value = GetDetailsMovieResult.Loading(true)
-            delay(2.seconds) // Just to see the loading screen
+            delay(1.seconds) // Just to see the loading screen
         }.onEach {
             _detailsMovie.value = GetDetailsMovieResult.Success(it)
         }.catch {
-            Timber.d("DetailsMovieViewModel: ${it.message}")
+            Timber.e("DetailsMovieViewModel: ${it.message}")
             _detailsMovie.value = GetDetailsMovieResult.Error("Error, ${it.message}")
         }.launchIn(viewModelScope)
     }
-
 
     fun saveOrRemoveFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch{
         if(isFavoriteMovie.value){
@@ -106,7 +105,7 @@ class DetailsMovieViewModel @Inject constructor(
                    else -> _isFavoriteMovie.value = true
                }
             }.catch {
-                Timber.d("getFavoriteMovieById error: ${it.message}")
+                Timber.e("getFavoriteMovieById error: ${it.message}")
                 _isFavoriteMovie.value = false
             }.launchIn(viewModelScope)
     }
