@@ -33,7 +33,8 @@ import timber.log.Timber
 @Composable
 fun MoviesScreen(
     moviesList: List<MovieDomain>,
-    onClickNavigateToDetails: (Int) -> Unit
+    onClickNavigateToDetails: (Int) -> Unit,
+    onQueryChange: (String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -47,14 +48,17 @@ fun MoviesScreen(
                 .height(70.dp)
                 .clip(RoundedCornerShape(40.dp)),
             query = searchQuery,
-            onQueryChange = { searchQuery = it },
+            onQueryChange = {  queryChanged ->
+                searchQuery = queryChanged // update the query state
+                onQueryChange(queryChanged) // call the callback
+                            },
             onSearch = { query ->
                 // Handle search ImeAction.Search here
             },
             active = true,
             onActiveChange = { isActive ->
             },
-            placeholder = { Text("Hinted search text") },
+            placeholder = { Text("Busca una película") },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             //trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = null) }
         ) {
@@ -112,6 +116,9 @@ fun MoviesScreenPrev() {
         moviesList = moviesTests,
         onClickNavigateToDetails = {
             Timber.d("onClickNavigateToDetails: $it")
+        },
+        onQueryChange = {
+            Timber.d("onQueryChange: $it")
         }
     )
 }

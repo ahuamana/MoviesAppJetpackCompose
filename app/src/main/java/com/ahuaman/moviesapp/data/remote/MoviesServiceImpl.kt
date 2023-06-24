@@ -18,6 +18,12 @@ interface IMoviesService {
         language: String,
         id: String
     ): Response<MoviesDetailResponse>
+
+    suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String,
+    ): Response<PopularsMovieResponse>
 }
 
 
@@ -38,5 +44,13 @@ class MoviesServiceImpl @Inject constructor(
         id: String
     ): Response<MoviesDetailResponse> {
         return moviesService.getMovieDetail(api_key =  api_key, language =  language, id = id)
+    }
+
+    override suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String
+    ): Response<PopularsMovieResponse> {
+        return moviesService.searchMovie(query = query, api_key = api_key, language = language)
     }
 }

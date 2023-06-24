@@ -17,6 +17,13 @@ interface IMoviesRemoteDataSource {
         language: String,
         id: String
     ): MoviesDetailResponse
+
+    suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String,
+    ): PopularsMovieResponse
+
 }
 
 
@@ -39,6 +46,15 @@ class MoviesRemoteDataSource @Inject constructor(
         id: String
     ) = getResult (
         call = { iMoviesService.getMovieDetail(api_key, language, id) },
+        forceError = false
+    )
+
+    override suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String
+    ) = getResult (
+        call = { iMoviesService.searchMovie(query, api_key, language) },
         forceError = false
     )
 }

@@ -23,6 +23,12 @@ interface IMoviesRepository {
         id: String
     ): Flow<MoviesDetailResponse>
 
+    suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String,
+    ): Flow<PopularsMovieResponse>
+
 
     //Local
     fun getFavoriteMovies(): Flow<List<FavoriteMoviesEntity>>
@@ -52,6 +58,16 @@ class MoviesRepository @Inject constructor(
         ) = performNetworkFlow {
             remote.getMovieDetail(api_key, language, id)
         }
+
+    override suspend fun searchMovie(
+        query: String,
+        api_key: String,
+        language: String
+    ): Flow<PopularsMovieResponse> {
+        return performNetworkFlow {
+            remote.searchMovie(query, api_key, language)
+        }
+    }
 
     override fun getFavoriteMovies(): Flow<List<FavoriteMoviesEntity>> {
         return local.getFavoriteMovies()

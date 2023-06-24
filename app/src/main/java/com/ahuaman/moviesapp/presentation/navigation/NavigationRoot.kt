@@ -59,6 +59,9 @@ fun homeNavGraph (navController: NavHostController) {
                 onClickNavigateToDetails = { movieID ->
                     Timber.d("movieId saved: $movieID")
                     navController.navigate(route = Graph.DETAILS + "/$movieID")
+                },
+                onQueryChange = { query ->
+                    moviesViewModel.searchMovieOrEmpty(query)
                 }
             )
         }
