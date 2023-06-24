@@ -1,11 +1,10 @@
-package com.paparazziteam.securityapplicationapp.framework
+package com.ahuaman.moviesapp.framework.network
 
 import android.util.Log
 import com.ahuaman.moviesapp.domain.GeneralErrorResponse
 import com.ahuaman.moviesapp.domain.InvalidExceptionGeneral
 import com.google.gson.Gson
 import retrofit2.Response
-import timber.log.Timber
 
 abstract class BaseDataSource {
 

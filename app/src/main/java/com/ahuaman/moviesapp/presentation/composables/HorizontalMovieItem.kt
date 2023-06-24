@@ -26,7 +26,6 @@ import com.gowtham.ratingbar.StepSize
 
 @Composable
 fun HorizontalMovieItem(
-    modifier: Modifier = Modifier,
     title: String,
     description: String,
     imageUrl: String,

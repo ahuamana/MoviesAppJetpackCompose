@@ -19,7 +19,9 @@ import com.ahuaman.moviesapp.usecases.GetDetailsMovieResult
 @Composable
 fun DetailsMovieScreen(
     navController: NavController,
-    stateMovieDetail: GetDetailsMovieResult
+    stateMovieDetail: GetDetailsMovieResult,
+    onClickFavorite: (MovieDetailDomain) -> Unit,
+    isFavoriteMovie:Boolean,
 ) {
     var isLoading by remember { mutableStateOf(false)}
     var isError by remember { mutableStateOf(false)}
@@ -56,8 +58,7 @@ fun DetailsMovieScreen(
                     onClickBack = {
                         navController.popBackStack()
                     },
-                    onClickFavorite = {/*TODO*/},
-
+                    onClickFavorite = { onClickFavorite(item) },
                     title = item.title?: "",
                     description = item.overview?: "",
                     imageBackdrop = item.backdrop_path?: "",
@@ -66,6 +67,7 @@ fun DetailsMovieScreen(
                     releaseDate = item.release_date?: "",
                     voteAverage = item.vote_average?.toString()?: "",
                     runtime = item.runtime?.toString()?: "",
+                    isFavoriteMovie = isFavoriteMovie
                 )
             }
         }

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ahuaman.moviesapp.R
 import com.ahuaman.moviesapp.domain.GenreDomain
+import com.ahuaman.moviesapp.domain.MovieDetailDomain
 import com.ahuaman.moviesapp.ui.theme.Green40
 
 @Composable
@@ -49,6 +50,7 @@ fun DetailsMovieContent(
     releaseDate: String,
     voteAverage: String,
     runtime: String,
+    isFavoriteMovie: Boolean,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -84,7 +86,7 @@ fun DetailsMovieContent(
                 modifier = Modifier.clickable {
                     onClickFavorite()
                 },
-                painter = painterResource(id = R.drawable.ic_unfavorite),
+                painter = painterResource(id = if(isFavoriteMovie) R.drawable.ic_love else R.drawable.ic_love_border),
                 contentDescription = null,
                 tint = Color.Black,
             )
@@ -326,6 +328,7 @@ fun DetailsMovieContentPrev() {
         voteAverage = "9.5",
         runtime = "118 minutos",
         onClickBack = {},
-        onClickFavorite = {}
+        onClickFavorite = {},
+        isFavoriteMovie = false
     )
 }

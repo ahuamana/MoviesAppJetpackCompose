@@ -85,11 +85,16 @@ fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
             val movieId = it.arguments?.getString("movieId")?: ""
             val detailsMovieViewModel = hiltViewModel<DetailsMovieViewModel>()
             val stateMovieDetail by detailsMovieViewModel.detailsMovie.collectAsStateWithLifecycle()
+            val isFavoriteMovie by detailsMovieViewModel.isFavoriteMovie.collectAsStateWithLifecycle()
             Timber.d("movieId retrieved: ${movieId}")
 
             DetailsMovieScreen(
                 navController = navController,
-                stateMovieDetail = stateMovieDetail
+                stateMovieDetail = stateMovieDetail,
+                onClickFavorite = { movieDetail ->
+                    detailsMovieViewModel.saveOrRemoveFavoriteMovie(movieDetail)
+                },
+                isFavoriteMovie = isFavoriteMovie,
             )
         }
     }

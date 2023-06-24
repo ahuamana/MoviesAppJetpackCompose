@@ -1,5 +1,7 @@
 package com.ahuaman.moviesapp.data.di
 
+import com.ahuaman.moviesapp.data.local.FavoriteMoviesLocalDataSourceImpl
+import com.ahuaman.moviesapp.data.local.IFavoriteMoviesLocalDataSource
 import com.ahuaman.moviesapp.data.remote.IMoviesRemoteDataSource
 import com.ahuaman.moviesapp.data.remote.IMoviesService
 import com.ahuaman.moviesapp.data.remote.MoviesRemoteDataSource
@@ -19,6 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class MoviesModule {
 
+    //Remote
     @Singleton
     @Binds
     abstract fun provideMovieServices(
@@ -37,6 +40,14 @@ abstract class MoviesModule {
         moviesRepositoryImpl: MoviesRepository
     ): IMoviesRepository
 
+
+    //Local
+
+    @Singleton
+    @Binds
+    abstract fun provideMoviesLocalDataSource(
+        moviesLocalDataSourceImpl: FavoriteMoviesLocalDataSourceImpl
+    ): IFavoriteMoviesLocalDataSource
 
 }
 

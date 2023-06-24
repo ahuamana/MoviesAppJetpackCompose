@@ -2,7 +2,7 @@ package com.ahuaman.moviesapp.data.remote
 
 import com.ahuaman.moviesapp.domain.MoviesDetailResponse
 import com.ahuaman.moviesapp.domain.PopularsMovieResponse
-import com.paparazziteam.securityapplicationapp.framework.BaseDataSource
+import com.ahuaman.moviesapp.framework.network.BaseDataSource
 import javax.inject.Inject
 
 interface IMoviesRemoteDataSource {

@@ -3,6 +3,13 @@ package com.ahuaman.moviesapp.domain
 import com.ahuaman.moviesapp.BuildConfig
 
 
+data class PopularsMovieResponse(
+    val page: Int,
+    val results: List<MovieEntity>,
+    val total_pages: Int,
+    val total_results: Int
+)
+
 data class MovieDomain(
     val id: Int,
     val poster_path: String,
@@ -18,13 +25,6 @@ data class MovieEntity(
     val overview: String,
     val title: String,
     val vote_average: Float,
-)
-
-data class PopularsMovieResponse(
-    val page: Int,
-    val results: List<MovieEntity>,
-    val total_pages: Int,
-    val total_results: Int
 )
 
 fun List<MovieEntity>.toDomainModel(): List<MovieDomain> {

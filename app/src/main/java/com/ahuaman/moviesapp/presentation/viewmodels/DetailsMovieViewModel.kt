@@ -1,12 +1,17 @@
 package com.ahuaman.moviesapp.presentation.viewmodels
 
+import androidx.compose.material3.TimeInput
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahuaman.moviesapp.BuildConfig
 import com.ahuaman.moviesapp.domain.MovieDetailDomain
+import com.ahuaman.moviesapp.domain.local.toFavoriteMoviesEntity
+import com.ahuaman.moviesapp.usecases.DeleteFavoriteMovieUseCase
 import com.ahuaman.moviesapp.usecases.GetDetailsMovieResult
 import com.ahuaman.moviesapp.usecases.GetDetailsMovieUseCase
+import com.ahuaman.moviesapp.usecases.GetFavoriteMovieByIdUseCase
+import com.ahuaman.moviesapp.usecases.InsertFavoriteMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,7 +29,10 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class DetailsMovieViewModel @Inject constructor(
     private val getDetailsMovieUseCase: GetDetailsMovieUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase,
+    private val getFavoriteMovieUseCase: GetFavoriteMovieByIdUseCase,
+    private val deleteFavoriteMovieUseCase: DeleteFavoriteMovieUseCase
 ):ViewModel(){
 
     private val _detailsMovie = MutableStateFlow<GetDetailsMovieResult>(GetDetailsMovieResult.Loading(false))
@@ -34,12 +42,24 @@ class DetailsMovieViewModel @Inject constructor(
         initialValue = GetDetailsMovieResult.Loading(false)
     )
 
+    private val _isFavoriteMovie = MutableStateFlow<Boolean>(false)
+    val isFavoriteMovie = _isFavoriteMovie.stateIn(
+        scope = viewModelScope,
+        started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000,1),
+        initialValue = false
+    )
+
     init {
         val idMovie = savedStateHandle.get<String>("movieId")?: ""
-        getDetailsMovie(idMovie)
+        start(idMovie)
     }
 
-    fun getDetailsMovie(id:String) = viewModelScope.launch(Dispatchers.IO) {
+    private fun start(idMovie:String) = viewModelScope.launch{
+        getDetailsMovie(idMovie).join()
+        getFavoriteMovieById(idMovie)
+    }
+
+    private fun getDetailsMovie(id:String) = viewModelScope.launch(Dispatchers.IO) {
         getDetailsMovieUseCase.invoke(
             api_key = BuildConfig.API_KEY,
             language = "es-ES",
@@ -48,12 +68,49 @@ class DetailsMovieViewModel @Inject constructor(
             _detailsMovie.value = GetDetailsMovieResult.Loading(true)
             delay(2.seconds) // Just to see the loading screen
         }.onEach {
-            Timber.d("DetailsMovieViewModel: $it")
             _detailsMovie.value = GetDetailsMovieResult.Success(it)
         }.catch {
             Timber.d("DetailsMovieViewModel: ${it.message}")
             _detailsMovie.value = GetDetailsMovieResult.Error("Error, ${it.message}")
         }.launchIn(viewModelScope)
     }
+
+
+    fun saveOrRemoveFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch{
+        if(isFavoriteMovie.value){
+            unMarkFavoriteMovie(movie)
+        }else{
+            markFavoriteMovie(movie)
+        }
+    }
+
+    private fun markFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch(Dispatchers.IO) {
+        insertFavoriteMovieUseCase.invoke(movie.toFavoriteMoviesEntity())
+    }
+
+    private fun unMarkFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch(Dispatchers.IO) {
+        val favoriteMovie = (movie.id?:0)
+        deleteFavoriteMovieUseCase.invoke(favoriteMovie)
+
+    }
+
+    private fun getFavoriteMovieById(idMovie:String) = viewModelScope.launch(Dispatchers.IO) {
+        val favoriteMovie = (idMovie.toIntOrNull()?:0)
+        getFavoriteMovieUseCase
+            .invoke(favoriteMovie)
+            .onStart {
+                _isFavoriteMovie.value = false
+            }.onEach {
+               when(it){
+                   null -> _isFavoriteMovie.value = false
+                   else -> _isFavoriteMovie.value = true
+               }
+            }.catch {
+                Timber.d("getFavoriteMovieById error: ${it.message}")
+                _isFavoriteMovie.value = false
+            }.launchIn(viewModelScope)
+    }
+
+    //save or remove favorite movie
 
 }
