@@ -4,4 +4,6 @@
     <string name="empty_screen_description_no_results">Intenta ajustar tu busqueda para encontrar lo que buscas</string>
     <string name="empty_screen_title_no_internet">Sin conexion a internet</string>
     <string name="empty_screen_descripcion_no_internet">Por favor revisa tu conexion a internet</string>
+    <string name="empty_screen_title_error_something_went_wrong">Oops!</string>
+    <string name="empty_screen_description_error_something_went_wrong">Algo pasó, por favor intenta de nuevo</string>
 </resources>

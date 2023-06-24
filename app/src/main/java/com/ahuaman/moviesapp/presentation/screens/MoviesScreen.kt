@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,14 +27,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahuaman.moviesapp.domain.MovieDomain
+import com.ahuaman.moviesapp.presentation.composables.CustomEmptySearchScreen
+import com.ahuaman.moviesapp.presentation.composables.CustomErrorScreenSomethingHappens
+import com.ahuaman.moviesapp.presentation.composables.CustomNoInternetConnectionScreen
 import com.ahuaman.moviesapp.presentation.composables.HorizontalMovieItem
-import com.ahuaman.moviesapp.presentation.composables.VerticalMovieItem
+import com.ahuaman.moviesapp.presentation.composables.LoadingScreen
+import com.ahuaman.moviesapp.usecases.PopularMoviesResult
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesScreen(
-    moviesList: List<MovieDomain>,
+    moviesList: PopularMoviesResult,
     onClickNavigateToDetails: (Int) -> Unit,
     onQueryChange: (String) -> Unit
 ) {
@@ -68,24 +74,91 @@ fun MoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        HeaderMoviesScreen(
+            onClickNavigateToDetails = onClickNavigateToDetails,
+            popularMoviesState = moviesList
+        )
 
-        LazyColumn(
-            content = {
-            items(moviesList) {
-                HorizontalMovieItem(
-                    title = it.title,
-                    description = it.overview,
-                    imageUrl = it.poster_path,
-                    rating = it.vote_average,
-                    realeaseDate = it.release_date?: "",
-                    onClick = { onClickNavigateToDetails(it.id) })
 
-                if(it == moviesList.last()) {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
-            }
-        })
     }
+}
+
+@Composable
+fun HeaderMoviesScreen(
+    onClickNavigateToDetails: (Int) -> Unit,
+    popularMoviesState:  PopularMoviesResult
+) {
+    var isErrorGeneral by rememberSaveable { mutableStateOf(false) }
+    var isSuccess by rememberSaveable { mutableStateOf(false) }
+    var isLoading by rememberSaveable { mutableStateOf(false) }
+    var isEmpty by rememberSaveable { mutableStateOf(false) }
+    var isInternetError by rememberSaveable { mutableStateOf(false) }
+
+    var popularMoviesList by rememberSaveable { mutableStateOf(listOf<MovieDomain>()) }
+
+    LaunchedEffect(key1 = popularMoviesState){
+        when(popularMoviesState){
+            PopularMoviesResult.Empty ->{
+                isLoading = false
+                isErrorGeneral = false
+                isInternetError = false
+                isEmpty = true
+            }
+            is PopularMoviesResult.ErrorGeneral -> {
+                isLoading = false
+                isErrorGeneral = true
+            }
+            PopularMoviesResult.InternetError -> {
+                isErrorGeneral = false
+            }
+            is PopularMoviesResult.Loading -> {
+                isLoading = popularMoviesState.isLoading
+                isErrorGeneral = false
+            }
+            is PopularMoviesResult.Success -> {
+                isLoading = false
+                isErrorGeneral = false
+                isEmpty = false
+                isInternetError = false
+                isSuccess = true
+                popularMoviesList = popularMoviesState.list
+            }
+        }
+    }
+
+    when {
+        isLoading -> {
+            LoadingScreen()
+        }
+        isErrorGeneral -> {
+            CustomErrorScreenSomethingHappens()
+        }
+        isInternetError -> {
+            CustomNoInternetConnectionScreen()
+        }
+        isEmpty -> {
+            CustomEmptySearchScreen()
+        }
+        isSuccess -> {
+            LazyColumn(
+                content = {
+                    items(popularMoviesList) {
+                        HorizontalMovieItem(
+                            title = it.title,
+                            description = it.overview,
+                            imageUrl = it.poster_path,
+                            rating = it.vote_average,
+                            realeaseDate = it.release_date?: "",
+                            onClick = { onClickNavigateToDetails(it.id) })
+
+                        if(it == popularMoviesList.last()) {
+                            Spacer(modifier = Modifier.height(80.dp))
+                        }
+                    }
+                })
+        }
+    }
+
 
 }
 
@@ -113,7 +186,7 @@ fun MoviesScreenPrev() {
     )
 
     MoviesScreen(
-        moviesList = moviesTests,
+        moviesList = PopularMoviesResult.Success(moviesTests),
         onClickNavigateToDetails = {
             Timber.d("onClickNavigateToDetails: $it")
         },

@@ -78,9 +78,10 @@ class DetailsMovieViewModel @Inject constructor(
     fun saveOrRemoveFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch{
         if(isFavoriteMovie.value){
             unMarkFavoriteMovie(movie)
-        }else{
-            markFavoriteMovie(movie)
+            return@launch
         }
+        //mark favorite movie if is not favorite
+        markFavoriteMovie(movie)
     }
 
     private fun markFavoriteMovie(movie:MovieDetailDomain) = viewModelScope.launch(Dispatchers.IO) {

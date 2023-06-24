@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.ahuaman.moviesapp.R
 import com.airbnb.lottie.compose.LottieAnimation
@@ -37,11 +38,47 @@ fun ErrorScreen() {
     }
 }
 
-
 @Preview
 @Composable
 fun ErrorScreenPrev() {
     ErrorScreen()
+}
+
+@Composable
+fun CustomErrorScreenSomethingHappens(){
+    CustomEmptyStateScreen(
+        title = stringResource(id = R.string.empty_screen_title_error_something_went_wrong),
+        //Algo pasó, por favor intenta de nuevo
+        description = stringResource(id = R.string.empty_screen_description_error_something_went_wrong),
+        image = R.drawable.background_something_wrong
+    )
+}
+
+//no internet
+@Composable
+fun CustomNoInternetConnectionScreen(){
+    CustomEmptyStateScreen(
+        title = stringResource(id = R.string.empty_screen_title_no_internet),
+        //Algo pasó, por favor intenta de nuevo
+        description = stringResource(id = R.string.empty_screen_descripcion_no_internet),
+        image = R.drawable.background_no_internet_connection
+    )
+}
+
+//emptysearch
+@Composable
+fun CustomEmptySearchScreen(){
+    CustomEmptyStateScreen(
+        image = R.drawable.background_empty_state,
+        title = "No se encontraron resultados",
+        description = "Intenta nuevamente con otros términos de búsqueda"
+    )
+}
+
+@Preview
+@Composable
+fun ErrorScreen2Prev() {
+    CustomErrorScreenSomethingHappens()
 }
 
 

@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +30,7 @@ import com.ahuaman.moviesapp.R
 fun CustomEmptyStateScreen(
     @DrawableRes image: Int,
     title: String,
-    subtitle: String
+    description: String
     ) {
     Column(
         modifier = Modifier
@@ -74,7 +73,7 @@ fun CustomEmptyStateScreen(
                     fontWeight = FontWeight(400),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    text = subtitle,
+                    text = description,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -91,7 +90,7 @@ fun EmptyMoviesScreenPrev() {
     CustomEmptyStateScreen(
         image = R.drawable.background_empty_state,
         title = "No se encontraron resultados",
-        subtitle = "Intenta nuevamente con otros términos de búsqueda"
+        description = "Intenta nuevamente con otros términos de búsqueda"
     )
 }
 
@@ -101,7 +100,7 @@ fun NoInternetConnectionPrev() {
     CustomEmptyStateScreen(
         image = R.drawable.background_no_internet_connection,
         title = "Sin conexión a internet",
-        subtitle = "Revisa tu conexión a internet e intenta nuevamente"
+        description = "Revisa tu conexión a internet e intenta nuevamente"
     )
 }
 
@@ -111,6 +110,6 @@ fun FavoriteEmptyPrev() {
     CustomEmptyStateScreen(
         image = R.drawable.background_box_empty_state,
         title = "No tienes favoritos",
-        subtitle = "Agrega películas a tus favoritos para verlas aquí"
+        description = "Agrega películas a tus favoritos para verlas aquí"
     )
 }

@@ -3,8 +3,8 @@ package com.ahuaman.moviesapp.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahuaman.moviesapp.BuildConfig
-import com.ahuaman.moviesapp.domain.MovieDomain
 import com.ahuaman.moviesapp.usecases.GetPopularMoviesUseCase
+import com.ahuaman.moviesapp.usecases.PopularMoviesResult
 import com.ahuaman.moviesapp.usecases.SearchMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,11 +24,11 @@ class MoviesViewModel @Inject constructor(
     private val searchMovieUseCase: SearchMovieUseCase
 ):ViewModel(){
 
-    private val _movies = MutableStateFlow<List<MovieDomain>>(emptyList())
-    val movies = _movies.stateIn(
+    private val _moviesStateResult = MutableStateFlow<PopularMoviesResult>(PopularMoviesResult.Loading(false))
+    val movies = _moviesStateResult.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000,1),
-        initialValue = emptyList()
+        initialValue = PopularMoviesResult.Loading(false)
     )
 
     init {
@@ -41,20 +41,26 @@ class MoviesViewModel @Inject constructor(
             language = "es-ES",
             page = 1
         ).onStart {
-            //emptyList()
+            _moviesStateResult.value = PopularMoviesResult.Loading(true)
         }.onEach {
-            _movies.value = it
+            _moviesStateResult.value = PopularMoviesResult.Success(it)
         }.catch {
-
+            when(it){
+                //TODO: Add more cases Internet connection, etc
+                else -> {
+                    _moviesStateResult.value = PopularMoviesResult.ErrorGeneral(it.message?: "Error general")
+                }
+            }
         }.launchIn(viewModelScope)
     }
 
     fun searchMovieOrEmpty(query:String){
         if(query.isEmpty()){
             getPopularMovies()
-        }else{
-            searchMovie(query)
+            return
         }
+        // Search movie only if query is not empty
+        searchMovie(query)
     }
 
     private fun searchMovie(query:String) = viewModelScope.launch(Dispatchers.IO){
@@ -64,11 +70,19 @@ class MoviesViewModel @Inject constructor(
             query = query,
             //page = 1
         ).onStart {
-            //emptyList()
+            _moviesStateResult.value = PopularMoviesResult.Loading(true)
         }.onEach {
-            _movies.value = it
+            if(it.isEmpty()){
+                _moviesStateResult.value = PopularMoviesResult.Empty
+                return@onEach
+            }
+            _moviesStateResult.value = PopularMoviesResult.Success(it)
         }.catch {
-
+            when(it){
+                else -> {
+                    _moviesStateResult.value = PopularMoviesResult.ErrorGeneral(it.message?: "Error general")
+                }
+            }
         }.launchIn(viewModelScope)
     }
 

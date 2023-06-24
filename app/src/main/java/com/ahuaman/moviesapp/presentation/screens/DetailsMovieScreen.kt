@@ -1,6 +1,5 @@
 package com.ahuaman.moviesapp.presentation.screens
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -12,7 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.ahuaman.moviesapp.domain.MovieDetailDomain
-import com.ahuaman.moviesapp.presentation.composables.ErrorScreen
+import com.ahuaman.moviesapp.presentation.composables.CustomNoInternetConnectionScreen
+import com.ahuaman.moviesapp.presentation.composables.CustomErrorScreenSomethingHappens
 import com.ahuaman.moviesapp.presentation.composables.LoadingScreen
 import com.ahuaman.moviesapp.usecases.GetDetailsMovieResult
 
@@ -25,6 +25,9 @@ fun DetailsMovieScreen(
 ) {
     var isLoading by remember { mutableStateOf(false)}
     var isError by remember { mutableStateOf(false)}
+    var isSuccess by remember { mutableStateOf(false)}
+    var isInternetError by remember { mutableStateOf(false)}
+
     var item by remember { mutableStateOf(MovieDetailDomain())}
 
 
@@ -33,14 +36,28 @@ fun DetailsMovieScreen(
             is GetDetailsMovieResult.Success -> {
                 isLoading = false
                 isError = false
+                isInternetError = false
+                isSuccess = true
                 item = stateMovieDetail.data
             }
             is GetDetailsMovieResult.Error -> {
                 isLoading = false
+                isSuccess = false
                 isError = true
+                isInternetError = false
             }
             is GetDetailsMovieResult.Loading -> {
+                isError = false
+                isSuccess = false
+                isInternetError = true
                 isLoading = stateMovieDetail.isLoading
+            }
+
+            is GetDetailsMovieResult.InternetError -> {
+                isLoading = false
+                isError = false
+                isInternetError = true
+                isSuccess = false
             }
         }
     }
@@ -51,9 +68,12 @@ fun DetailsMovieScreen(
                 LoadingScreen()
             }
             isError -> {
-                ErrorScreen()
+                CustomErrorScreenSomethingHappens()
             }
-            else -> {
+            isInternetError -> {
+                CustomNoInternetConnectionScreen()
+            }
+            isSuccess -> {
                 DetailsMovieContent(
                     onClickBack = {
                         navController.popBackStack()

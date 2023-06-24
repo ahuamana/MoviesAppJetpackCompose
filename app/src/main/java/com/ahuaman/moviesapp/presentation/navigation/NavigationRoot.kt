@@ -53,9 +53,9 @@ fun homeNavGraph (navController: NavHostController) {
 
         composable(HomeScreen.MoviesHomeScreen.route) {
             val moviesViewModel = hiltViewModel<MoviesViewModel>()
-            val movies by moviesViewModel.movies.collectAsStateWithLifecycle()
+            val moviesState by moviesViewModel.movies.collectAsStateWithLifecycle()
             MoviesScreen(
-                moviesList = movies,
+                moviesList = moviesState,
                 onClickNavigateToDetails = { movieID ->
                     Timber.d("movieId saved: $movieID")
                     navController.navigate(route = Graph.DETAILS + "/$movieID")
