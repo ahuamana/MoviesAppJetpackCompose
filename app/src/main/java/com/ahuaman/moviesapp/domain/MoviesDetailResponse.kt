@@ -1,5 +1,7 @@
 package com.ahuaman.moviesapp.domain
 
+import com.ahuaman.moviesapp.BuildConfig
+
 data class MoviesDetailResponse(
     val adult: Boolean,
     val backdrop_path: String,
@@ -79,6 +81,7 @@ data class MovieDetailDomain(
     val release_date: String? = null,
     val revenue: Int? = null,
     val runtime: Int? = null,
+    val runtimeWithMinutes: String? = null,
     val spoken_languages: List<SpokenLanguageDomain>? = null,
     val status: String? = null,
     val tagline: String? = null,
@@ -89,33 +92,33 @@ data class MovieDetailDomain(
 )
 
 data class BelongsToCollectionDomain(
-    val backdrop_path: String,
-    val id: Int,
-    val name: String,
-    val poster_path: String
+    val backdrop_path: String? = null,
+    val id: Int? = null,
+    val name: String? = null,
+    val poster_path: String? = null,
 )
 
 data class GenreDomain(
-    val id: Int,
-    val name: String
+    val id: Int? = null,
+    val name: String? = null,
 )
 
 data class ProductionCompanyDomain(
-    val id: Int,
-    val logo_path: String,
-    val name: String,
-    val origin_country: String
+    val id: Int? = null,
+    val logo_path: String? = null,
+    val name: String? = null,
+    val origin_country: String? = null,
 )
 
 data class ProductionCountryDomain(
-    val iso_3166_1: String,
-    val name: String
+    val iso_3166_1: String? = null,
+    val name: String? = null,
 )
 
 data class SpokenLanguageDomain(
-    val english_name: String,
-    val iso_639_1: String,
-    val name: String
+    val english_name: String? = null,
+    val iso_639_1: String? = null,
+    val name: String? = null,
 )
 
 //Mapper to Domain
@@ -123,7 +126,7 @@ data class SpokenLanguageDomain(
 fun MoviesDetailResponse.toDomainModel(): MovieDetailDomain {
     return MovieDetailDomain(
         adult = this.adult,
-        backdrop_path = this.backdrop_path,
+        backdrop_path = BuildConfig.IMAGE_URL + this.backdrop_path,
         belongs_to_collection = this.belongs_to_collection.toDomainBelongsCollection(),
         budget = this.budget,
         genres = this.genres.toDomainGenre(),
@@ -134,12 +137,13 @@ fun MoviesDetailResponse.toDomainModel(): MovieDetailDomain {
         original_title = this.original_title,
         overview = this.overview,
         popularity = this.popularity,
-        poster_path = this.poster_path,
+        poster_path = BuildConfig.IMAGE_URL + this.poster_path,
         production_companies = this.production_companies.toDomainProductionCompany(),
         production_countries = this.production_countries.toDomainProductionCountry(),
         release_date = this.release_date,
         revenue = this.revenue,
         runtime = this.runtime,
+        runtimeWithMinutes = this.runtime.toString() + " minutos",
         spoken_languages = this.spoken_languages.toDomainSpokenLan(),
         status = this.status,
         tagline = this.tagline,

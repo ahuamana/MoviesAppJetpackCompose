@@ -19,7 +19,6 @@ import com.ahuaman.moviesapp.presentation.screens.FavoritesScreen
 import com.ahuaman.moviesapp.presentation.screens.MoviesScreen
 import com.ahuaman.moviesapp.presentation.screens.DashboardScreen
 import com.ahuaman.moviesapp.presentation.viewmodels.DetailsMovieViewModel
-import com.ahuaman.moviesapp.presentation.viewmodels.DetailsSharedViewModel
 import com.ahuaman.moviesapp.presentation.viewmodels.MoviesViewModel
 import timber.log.Timber
 
@@ -82,15 +81,10 @@ fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
     ){
 
         composable(DetailsScreen.Information.route) {
+            val movieId = it.arguments?.getString("movieId")?: ""
             val detailsMovieViewModel = hiltViewModel<DetailsMovieViewModel>()
             val stateMovieDetail by detailsMovieViewModel.detailsMovie.collectAsStateWithLifecycle()
-
-            val movieId = it.arguments?.getString("movieId")?: ""
             Timber.d("movieId retrieved: ${movieId}")
-
-            LaunchedEffect(key1 = null) {
-                detailsMovieViewModel.getDetailsMovie(id = movieId)
-            }
 
             DetailsMovieScreen(
                 navController = navController,
