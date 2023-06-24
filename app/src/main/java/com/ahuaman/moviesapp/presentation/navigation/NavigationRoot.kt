@@ -66,7 +66,8 @@ fun homeNavGraph (navController: NavHostController) {
             FavoritesScreen(
                 onClickNavigateToDetails = {
                     navController.navigate(route = Graph.DETAILS)
-                }
+                },
+                favoriteMovies = emptyList()
             )
         }
         detailsNavGraph(navController = navController)

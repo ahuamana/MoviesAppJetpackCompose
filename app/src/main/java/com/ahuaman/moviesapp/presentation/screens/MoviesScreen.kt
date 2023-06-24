@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahuaman.moviesapp.domain.MovieDomain
+import com.ahuaman.moviesapp.presentation.composables.HorizontalMovieItem
 import com.ahuaman.moviesapp.presentation.composables.VerticalMovieItem
 import timber.log.Timber
 
@@ -65,7 +66,7 @@ fun MoviesScreen(
 
         LazyColumn(content = {
             items(moviesList) {
-                VerticalMovieItem(
+                HorizontalMovieItem(
                     title = it.title,
                     description = it.overview,
                     imageUrl = it.poster_path,
