@@ -26,15 +26,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahuaman.moviesapp.domain.MovieDomain
 import com.ahuaman.moviesapp.presentation.composables.VerticalMovieItem
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesScreen(
     moviesList: List<MovieDomain>,
+    onClickNavigateToDetails: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
         var searchQuery by rememberSaveable { mutableStateOf("") }
+
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(
             modifier = Modifier
@@ -60,7 +63,6 @@ fun MoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         LazyColumn(content = {
             items(moviesList) {
                 VerticalMovieItem(
@@ -68,7 +70,7 @@ fun MoviesScreen(
                     description = it.overview,
                     imageUrl = it.poster_path,
                     rating = it.vote_average,
-                    onClick = {  }
+                    onClick = { onClickNavigateToDetails(it.id) }
                 )
             }
         })
@@ -80,7 +82,6 @@ fun MoviesScreen(
 @Preview
 @Composable
 fun MoviesScreenPrev() {
-
     val moviesTests = listOf<MovieDomain>(
         MovieDomain(
             id = 1,
@@ -99,6 +100,9 @@ fun MoviesScreenPrev() {
     )
 
     MoviesScreen(
-        moviesList = moviesTests
+        moviesList = moviesTests,
+        onClickNavigateToDetails = {
+            Timber.d("onClickNavigateToDetails: $it")
+        }
     )
 }

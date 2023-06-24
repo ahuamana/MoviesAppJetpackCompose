@@ -1,5 +1,6 @@
 package com.ahuaman.moviesapp.domain
 
+import com.ahuaman.moviesapp.BuildConfig
 
 
 data class MovieDomain(
@@ -21,7 +22,7 @@ data class MovieEntity(
 
 data class PopularsMovieResponse(
     val page: Int,
-    val results: List<MovieDomain>,
+    val results: List<MovieEntity>,
     val total_pages: Int,
     val total_results: Int
 )
@@ -30,7 +31,7 @@ fun List<MovieEntity>.toDomainModel(): List<MovieDomain> {
     return map {
         MovieDomain(
             id = it.id,
-            poster_path = it.poster_path,
+            poster_path = BuildConfig.IMAGE_URL + it.poster_path, // Here we are adding the base url to the poster_path
             overview = it.overview,
             title = it.title,
             vote_average = it.vote_average
