@@ -68,6 +68,7 @@ fun MoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
         LazyColumn(
             content = {
             items(moviesList) {
@@ -77,8 +78,7 @@ fun MoviesScreen(
                     imageUrl = it.poster_path,
                     rating = it.vote_average,
                     realeaseDate = it.release_date?: "",
-                    onClick = { onClickNavigateToDetails(it.id) }
-                )
+                    onClick = { onClickNavigateToDetails(it.id) })
 
                 if(it == moviesList.last()) {
                     Spacer(modifier = Modifier.height(80.dp))
