@@ -154,6 +154,7 @@ fun HeaderMoviesScreen(
             LazyColumn(
                 content = {
                     items(popularMoviesList) {
+
                         HorizontalMovieItem(
                             title = it.title,
                             description = it.overview,
