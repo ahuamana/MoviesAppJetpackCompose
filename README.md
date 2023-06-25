@@ -19,7 +19,7 @@ The Movies App is a sample Android application that allows users to browse and d
 - Room: Android's SQLite database library for local data storage.
 - ViewModel: Part of the Android Architecture Components, used to manage UI-related data in a lifecycle-aware manner.
 - Retrofit: HTTP client library for making network requests.
-- Moshi: JSON serialization/deserialization library for parsing API responses.
+- Gson: JSON serialization/deserialization library for parsing API responses.
 - Dagger Hilt: Dependency injection framework for Android.
 - Coil: Image loading library for displaying movie posters and images.
 - Kotlin DSL: Gradle build scripts written in Kotlin.
