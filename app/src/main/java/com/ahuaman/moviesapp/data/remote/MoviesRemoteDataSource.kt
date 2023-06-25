@@ -3,6 +3,8 @@ package com.ahuaman.moviesapp.data.remote
 import com.ahuaman.moviesapp.domain.MoviesDetailResponse
 import com.ahuaman.moviesapp.domain.PopularsMovieResponse
 import com.ahuaman.moviesapp.framework.network.BaseDataSource
+import com.paparazziteam.securityapplicationapp.framework.performNetworkFlow
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface IMoviesRemoteDataSource {
@@ -10,51 +12,48 @@ interface IMoviesRemoteDataSource {
         api_key: String,
         language: String,
         page: Int
-    ): PopularsMovieResponse
+    ): Flow<PopularsMovieResponse>
 
     suspend fun getMovieDetail(
         api_key: String,
         language: String,
         id: String
-    ): MoviesDetailResponse
+    ): Flow<MoviesDetailResponse>
 
     suspend fun searchMovie(
         query: String,
         api_key: String,
         language: String,
-    ): PopularsMovieResponse
+    ): Flow<PopularsMovieResponse>
 
 }
 
 
 class MoviesRemoteDataSource @Inject constructor(
     private val iMoviesService: IMoviesService
-) : BaseDataSource(), IMoviesRemoteDataSource {
+) :IMoviesRemoteDataSource {
 
     override suspend fun getPopularMovies(
         api_key: String,
         language: String,
         page: Int
-    ) = getResult (
-        call = { iMoviesService.getPopularMovies(api_key, language, page) },
-        forceError = false
-    )
+    ) = performNetworkFlow {
+        iMoviesService.getPopularMovies(api_key, language, page)
+    }
 
     override suspend fun getMovieDetail(
         api_key: String,
         language: String,
         id: String
-    ) = getResult (
-        call = { iMoviesService.getMovieDetail(api_key, language, id) },
-        forceError = false
-    )
+    ) = performNetworkFlow {
+        iMoviesService.getMovieDetail(api_key, language, id)
+    }
 
     override suspend fun searchMovie(
         query: String,
         api_key: String,
         language: String
-    ) = getResult (
-        call = { iMoviesService.searchMovie(query, api_key, language) },
-        forceError = false
-    )
+    ) = performNetworkFlow {
+        iMoviesService.searchMovie(query, api_key, language)
+    }
 }

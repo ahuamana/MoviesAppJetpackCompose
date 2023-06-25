@@ -3,6 +3,7 @@ package com.ahuaman.moviesapp.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahuaman.moviesapp.BuildConfig
+import com.ahuaman.moviesapp.domain.NoConnectivityException
 import com.ahuaman.moviesapp.usecases.GetPopularMoviesUseCase
 import com.ahuaman.moviesapp.usecases.PopularMoviesResult
 import com.ahuaman.moviesapp.usecases.SearchMovieUseCase
@@ -47,6 +48,9 @@ class MoviesViewModel @Inject constructor(
         }.catch {
             when(it){
                 //TODO: Add more cases Internet connection, etc
+                is NoConnectivityException -> {
+                    _moviesStateResult.value = PopularMoviesResult.InternetError
+                }
                 else -> {
                     _moviesStateResult.value = PopularMoviesResult.ErrorGeneral(it.message?: "Error general")
                 }
@@ -79,6 +83,7 @@ class MoviesViewModel @Inject constructor(
             _moviesStateResult.value = PopularMoviesResult.Success(it)
         }.catch {
             when(it){
+
                 else -> {
                     _moviesStateResult.value = PopularMoviesResult.ErrorGeneral(it.message?: "Error general")
                 }

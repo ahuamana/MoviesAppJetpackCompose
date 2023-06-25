@@ -2,6 +2,7 @@ package com.ahuaman.moviesapp.framework.network
 
 import com.ahuaman.moviesapp.BuildConfig
 import com.ahuaman.moviesapp.data.remote.MoviesService
+import com.ahuaman.moviesapp.framework.network.internetconnection.ConnectivityInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,11 +17,13 @@ import javax.inject.Singleton
 object NetworkModule {
 
 
-
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(connectivityInterceptor: ConnectivityInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .followRedirects(true)
+            .followSslRedirects(true)
+            //.addInterceptor(connectivityInterceptor)
             .build()
     }
 

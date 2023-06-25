@@ -43,7 +43,7 @@ fun CustomEmptyStateScreen(
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = Color.Transparent
             )
         ) {
             Column(

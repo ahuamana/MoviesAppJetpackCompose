@@ -1,7 +1,9 @@
 package com.ahuaman.moviesapp.presentation.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -27,8 +29,13 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.ahuaman.moviesapp.R
 import com.ahuaman.moviesapp.presentation.navigation.HomeScreen
 import com.ahuaman.moviesapp.presentation.navigation.homeNavGraph
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import timber.log.Timber
 
 
@@ -36,6 +43,7 @@ import timber.log.Timber
 @Composable
 fun DashboardScreen() {
     val navController:NavHostController = rememberNavController()
+    val lottieStarsBackground by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.rising_bubbles_lottie))
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +52,17 @@ fun DashboardScreen() {
         }
     ) {
         //content
-        homeNavGraph(navController = navController)
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            homeNavGraph(navController = navController)
+
+            LottieAnimation(
+                composition = lottieStarsBackground,
+                modifier = Modifier.
+                fillMaxWidth(1f),
+                iterations = LottieConstants.IterateForever)
+        }
+
     }
 }
 

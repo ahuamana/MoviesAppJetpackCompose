@@ -47,26 +47,20 @@ class MoviesRepository @Inject constructor(
             api_key: String,
             language: String,
             page: Int
-        ) = performNetworkFlow {
-           remote.getPopularMovies(api_key, language, page)
-        }
+        ) = remote.getPopularMovies(api_key, language, page)
 
         override suspend fun getMovieDetail(
             api_key: String,
             language: String,
             id: String
-        ) = performNetworkFlow {
-            remote.getMovieDetail(api_key, language, id)
-        }
+        ) = remote.getMovieDetail(api_key, language, id)
 
     override suspend fun searchMovie(
         query: String,
         api_key: String,
         language: String
     ): Flow<PopularsMovieResponse> {
-        return performNetworkFlow {
-            remote.searchMovie(query, api_key, language)
-        }
+        return remote.searchMovie(query, api_key, language)
     }
 
     override fun getFavoriteMovies(): Flow<List<FavoriteMoviesEntity>> {
