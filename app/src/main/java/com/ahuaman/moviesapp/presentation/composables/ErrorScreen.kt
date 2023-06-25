@@ -45,8 +45,11 @@ fun ErrorScreenPrev() {
 }
 
 @Composable
-fun CustomErrorScreenSomethingHappens(){
+fun CustomErrorScreenSomethingHappens(
+    modifier: Modifier = Modifier,
+){
     CustomEmptyStateScreen(
+        modifier = modifier,
         title = stringResource(id = R.string.empty_screen_title_error_something_went_wrong),
         //Algo pasó, por favor intenta de nuevo
         description = stringResource(id = R.string.empty_screen_description_error_something_went_wrong),
@@ -56,8 +59,11 @@ fun CustomErrorScreenSomethingHappens(){
 
 //no internet
 @Composable
-fun CustomNoInternetConnectionScreen(){
+fun CustomNoInternetConnectionScreen(
+    modifier: Modifier = Modifier,
+){
     CustomEmptyStateScreen(
+        modifier = modifier,
         title = stringResource(id = R.string.empty_screen_title_no_internet),
         //Algo pasó, por favor intenta de nuevo
         description = stringResource(id = R.string.empty_screen_descripcion_no_internet),
@@ -67,11 +73,16 @@ fun CustomNoInternetConnectionScreen(){
 
 //emptysearch
 @Composable
-fun CustomEmptySearchScreen(){
+fun CustomEmptySearchScreen(
+    modifier: Modifier = Modifier,
+    title: String = stringResource(id = R.string.empty_screen_title_not_found_results),
+    description: String = stringResource(id = R.string.empty_screen_description_no_results, "busqueda")
+){
     CustomEmptyStateScreen(
-        image = R.drawable.background_empty_state,
-        title = "No se encontraron resultados",
-        description = "Intenta nuevamente con otros términos de búsqueda"
+        modifier = modifier,
+        title = title,
+        description = description,
+        image = R.drawable.background_empty_state
     )
 }
 

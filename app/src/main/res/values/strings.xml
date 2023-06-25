@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">moviesapp</string>
     <string name="empty_screen_title_not_found_results">No se encontraron resultados</string>
-    <string name="empty_screen_description_no_results">Intenta ajustar tu busqueda para encontrar lo que buscas</string>
+    <string name="empty_screen_description_no_results">No se encontraron resultados para: %1$s</string>
     <string name="empty_screen_title_no_internet">Sin conexion a internet</string>
     <string name="empty_screen_descripcion_no_internet">Por favor revisa tu conexion a internet</string>
     <string name="empty_screen_title_error_something_went_wrong">Oops!</string>
     <string name="empty_screen_description_error_something_went_wrong">Algo pasó, por favor intenta de nuevo</string>
+    <string name="screen_empty_title_favorites">No tienes favoritos</string>
+    <string name="screen_empty_description_favorites">Agrega películas a tus favoritos para verlas aquí</string>
 </resources>

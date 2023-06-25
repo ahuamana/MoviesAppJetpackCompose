@@ -24,8 +24,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ahuaman.moviesapp.R
 import com.ahuaman.moviesapp.domain.MovieDomain
 import com.ahuaman.moviesapp.presentation.composables.CustomEmptySearchScreen
 import com.ahuaman.moviesapp.presentation.composables.CustomErrorScreenSomethingHappens
@@ -75,6 +77,7 @@ fun MoviesScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         HeaderMoviesScreen(
+            searchQuery = searchQuery,
             onClickNavigateToDetails = onClickNavigateToDetails,
             popularMoviesState = moviesList
         )
@@ -85,6 +88,7 @@ fun MoviesScreen(
 
 @Composable
 fun HeaderMoviesScreen(
+    searchQuery: String,
     onClickNavigateToDetails: (Int) -> Unit,
     popularMoviesState:  PopularMoviesResult
 ) {
@@ -131,13 +135,20 @@ fun HeaderMoviesScreen(
             LoadingScreen()
         }
         isErrorGeneral -> {
-            CustomErrorScreenSomethingHappens()
+            CustomErrorScreenSomethingHappens(
+                modifier = Modifier.padding(bottom = 180.dp),
+            )
         }
         isInternetError -> {
-            CustomNoInternetConnectionScreen()
+            CustomNoInternetConnectionScreen(
+                modifier = Modifier.padding(bottom = 180.dp),
+            )
         }
         isEmpty -> {
-            CustomEmptySearchScreen()
+            CustomEmptySearchScreen(
+                Modifier.padding(bottom = 180.dp),
+                description = stringResource(id = R.string.empty_screen_description_no_results, searchQuery)
+            )
         }
         isSuccess -> {
             LazyColumn(

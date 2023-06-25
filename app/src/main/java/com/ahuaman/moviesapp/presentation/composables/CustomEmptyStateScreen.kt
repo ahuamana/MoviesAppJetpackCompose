@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -28,12 +29,13 @@ import com.ahuaman.moviesapp.R
 
 @Composable
 fun CustomEmptyStateScreen(
+    modifier: Modifier = Modifier,
     @DrawableRes image: Int,
     title: String,
     description: String
     ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
@@ -58,7 +60,7 @@ fun CustomEmptyStateScreen(
                     fontFamily = FontFamily(Font(R.font.googlesans_bold)),
                     fontWeight = FontWeight(700),
                     textAlign = TextAlign.Center,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     text = title,
                     )
@@ -88,9 +90,10 @@ fun CustomEmptyStateScreen(
 @Composable
 fun EmptyMoviesScreenPrev() {
     CustomEmptyStateScreen(
+
         image = R.drawable.background_empty_state,
         title = "No se encontraron resultados",
-        description = "Intenta nuevamente con otros términos de búsqueda"
+        description = stringResource(id = R.string.empty_screen_description_no_results, "crepusculo")
     )
 }
 

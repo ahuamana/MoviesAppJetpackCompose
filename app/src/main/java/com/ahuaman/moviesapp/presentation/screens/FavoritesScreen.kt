@@ -13,10 +13,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ahuaman.moviesapp.R
 import com.ahuaman.moviesapp.domain.MovieDomain
 import com.ahuaman.moviesapp.domain.local.FavoriteMoviesEntity
+import com.ahuaman.moviesapp.presentation.composables.CustomEmptyStateScreen
 import com.ahuaman.moviesapp.presentation.composables.VerticalMovieItem
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -25,27 +28,40 @@ fun FavoritesScreen(
     onClickNavigateToDetails: (Int) -> Unit,
     favoriteMovies: List<FavoriteMoviesEntity>,
 ) {
-    LazyVerticalStaggeredGrid(
-        modifier = Modifier.fillMaxSize(),
-        columns = StaggeredGridCells.Fixed(2),
-        verticalItemSpacing = 0.dp,
-        horizontalArrangement = Arrangement.Center,
-        content = {
-            items(favoriteMovies){
-                VerticalMovieItem(
-                    title = it.title,
-                    release = it.overview,
-                    imageUrl = it.poster_path,
-                    onClick = { onClickNavigateToDetails(it.id) }
-                )
-
-                if(it == favoriteMovies.last()) {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
-
-            }
+    when{
+        favoriteMovies.isEmpty() -> {
+            CustomEmptyStateScreen(
+                modifier = Modifier.padding(bottom = 180.dp),
+                image = R.drawable.background_box_empty_state,
+                title = stringResource(R.string.screen_empty_title_favorites),
+                description = stringResource(R.string.screen_empty_description_favorites)
+            )
         }
-    )
+        else -> {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier.fillMaxSize(),
+                columns = StaggeredGridCells.Fixed(2),
+                verticalItemSpacing = 0.dp,
+                horizontalArrangement = Arrangement.Center,
+                content = {
+                    items(favoriteMovies){
+                        VerticalMovieItem(
+                            title = it.title,
+                            release = it.overview,
+                            imageUrl = it.poster_path,
+                            onClick = { onClickNavigateToDetails(it.id) }
+                        )
+
+                        if(it == favoriteMovies.last()) {
+                            Spacer(modifier = Modifier.height(80.dp))
+                        }
+
+                    }
+                }
+            )
+        }
+    }
+
 }
 
 @Preview

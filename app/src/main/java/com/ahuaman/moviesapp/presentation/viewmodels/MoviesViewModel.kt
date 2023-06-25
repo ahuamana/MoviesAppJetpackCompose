@@ -35,7 +35,7 @@ class MoviesViewModel @Inject constructor(
         getPopularMovies()
     }
 
-    private fun getPopularMovies() = viewModelScope.launch(Dispatchers.IO){
+    fun getPopularMovies() = viewModelScope.launch(Dispatchers.IO){
         getPopularMoviesUseCase.invoke(
             api_key = BuildConfig.API_KEY,
             language = "es-ES",
