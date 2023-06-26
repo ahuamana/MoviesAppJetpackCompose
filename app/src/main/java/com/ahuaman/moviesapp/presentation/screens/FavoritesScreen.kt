@@ -1,5 +1,8 @@
 package com.ahuaman.moviesapp.presentation.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +24,7 @@ import com.ahuaman.moviesapp.domain.MovieDomain
 import com.ahuaman.moviesapp.domain.local.FavoriteMoviesEntity
 import com.ahuaman.moviesapp.presentation.composables.CustomEmptyStateScreen
 import com.ahuaman.moviesapp.presentation.composables.VerticalMovieItem
+import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -45,17 +49,23 @@ fun FavoritesScreen(
                 horizontalArrangement = Arrangement.Center,
                 content = {
                     items(favoriteMovies){
-                        VerticalMovieItem(
-                            title = it.title,
-                            release = it.overview,
-                            imageUrl = it.poster_path,
-                            onClick = { onClickNavigateToDetails(it.id) }
-                        )
 
-                        if(it == favoriteMovies.last()) {
-                            Spacer(modifier = Modifier.height(80.dp))
+                        AnimatedVisibility(
+                            visible = it in favoriteMovies,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                        ) {
+                            VerticalMovieItem(
+                                title = it.title,
+                                release = it.overview,
+                                imageUrl = it.poster_path,
+                                onClick = { onClickNavigateToDetails(it.id) }
+                            )
+
+                            if(it == favoriteMovies.last()) {
+                                Spacer(modifier = Modifier.height(80.dp))
+                            }
                         }
-
                     }
                 }
             )

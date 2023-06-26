@@ -1,5 +1,23 @@
 package com.ahuaman.moviesapp.presentation.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -86,6 +105,7 @@ fun MoviesScreen(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HeaderMoviesScreen(
     searchQuery: String,
@@ -151,27 +171,40 @@ fun HeaderMoviesScreen(
             )
         }
         isSuccess -> {
-            LazyColumn(
-                content = {
-                    items(popularMoviesList) {
 
+            val visibleItems by rememberSaveable { mutableStateOf(popularMoviesList) }
+
+            LazyColumn {
+                items(popularMoviesList, key = { it.id }) {item ->
+
+                    AnimatedVisibility(
+                        visible = true,
+                        //scaleOut
+                        enter = scaleIn(
+                            initialScale = 0.9f,
+                            animationSpec = tween(700, easing = FastOutSlowInEasing)
+                        ) + expandVertically(),
+                        exit = scaleOut(
+                            targetScale = 0.9f,
+                            animationSpec = tween(700, easing = FastOutSlowInEasing)
+                        ) + shrinkVertically()
+                    ) {
                         HorizontalMovieItem(
-                            title = it.title,
-                            description = it.overview,
-                            imageUrl = it.poster_path,
-                            rating = it.vote_average,
-                            realeaseDate = it.release_date?: "",
-                            onClick = { onClickNavigateToDetails(it.id) })
+                            title = item.title,
+                            description = item.overview,
+                            imageUrl = item.poster_path,
+                            rating = item.vote_average,
+                            realeaseDate = item.release_date ?: "",
+                            onClick = { onClickNavigateToDetails(item.id) })
 
-                        if(it == popularMoviesList.last()) {
+                        if (item == popularMoviesList.last()) {
                             Spacer(modifier = Modifier.height(80.dp))
                         }
                     }
-                })
+                }
+            }
         }
     }
-
-
 }
 
 
